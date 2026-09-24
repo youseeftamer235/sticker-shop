@@ -1,0 +1,2 @@
+import {NextResponse} from 'next/server';
+export async function POST(req:Request){try{const body=await req.json();if(!body?.customer?.name||!body?.customer?.phone||!body?.customer?.address||!Array.isArray(body.items)||!body.items.length)return NextResponse.json({error:'بيانات الطلب ناقصة'},{status:400});const orderId=`ST-${Date.now().toString(36).toUpperCase()}`;console.log('NEW_ORDER',JSON.stringify({...body,orderId}));return NextResponse.json({ok:true,orderId});}catch{return NextResponse.json({error:'Invalid request'},{status:400})}}

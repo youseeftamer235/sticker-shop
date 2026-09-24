@@ -1,0 +1,5 @@
+'use client';
+import {create} from 'zustand';import {persist} from 'zustand/middleware';import {Product} from '@/types/product';
+export type CartItem={product:Product;quantity:number;finish:'matte'|'glossy';type:'single'|'sheet-a4'|'sheet-a5'};
+type CartState={items:CartItem[];open:boolean;add:(item:CartItem)=>void;remove:(id:string)=>void;setQty:(id:string,q:number)=>void;clear:()=>void;setOpen:(v:boolean)=>void};
+export const useCart=create<CartState>()(persist((set)=>({items:[],open:false,add:(item)=>set(s=>{const key=`${item.product.id}-${item.finish}-${item.type}`;const found=s.items.find(i=>`${i.product.id}-${i.finish}-${i.type}`===key);return {items:found?s.items.map(i=>i===found?{...i,quantity:i.quantity+item.quantity}:i):[...s.items,item],open:true}}),remove:(id)=>set(s=>({items:s.items.filter(i=>i.product.id!==id)})),setQty:(id,q)=>set(s=>({items:s.items.map(i=>i.product.id===id?{...i,quantity:Math.max(1,q)}:i)})),clear:()=>set({items:[]}),setOpen:(open)=>set({open})}),{name:'sticker-shop-cart'}));
