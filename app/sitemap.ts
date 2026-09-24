@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://sticker-shop-lyi3fqy81-sticker-shop.vercel.app';
+  const baseUrl = 'https://sticker-shop-sandy.vercel.app';
   return [
     {
       url: baseUrl,
