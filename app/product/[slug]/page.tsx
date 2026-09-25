@@ -58,6 +58,51 @@ export default async function ProductPage({
   params,
 }: Props) {
   const { slug } = await params;
+  const product = getProduct(slug);
 
-  return <ProductView slug={slug} />;
+  if (!product) {
+    return <ProductView slug={slug} />;
+  }
+
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: [product.image],
+    url: `${siteUrl}/product/${product.slug}`,
+
+    brand: {
+      '@type': 'Brand',
+      name: 'Sticker Hub',
+    },
+
+    offers: {
+      '@type': 'Offer',
+      url: `${siteUrl}/product/${product.slug}`,
+      priceCurrency: 'EGP',
+      price: product.price,
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+    },
+
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: product.rating,
+      reviewCount: product.reviews,
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productSchema),
+        }}
+      />
+
+      <ProductView slug={slug} />
+    </>
+  );
 }
