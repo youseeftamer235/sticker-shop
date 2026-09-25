@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { products } from '@/lib/data';
+import { categories, products } from '@/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://sticker-shop-sandy.vercel.app';
@@ -25,12 +25,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const productPages: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${baseUrl}/product/${product.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
+  const categoryPages: MetadataRoute.Sitemap = categories.map(
+    (category) => ({
+      url: `${baseUrl}/shop/${category.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })
+  );
 
-  return [...staticPages, ...productPages];
+  const productPages: MetadataRoute.Sitemap = products.map(
+    (product) => ({
+      url: `${baseUrl}/product/${product.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    })
+  );
+
+  return [
+    ...staticPages,
+    ...categoryPages,
+    ...productPages,
+  ];
 }
